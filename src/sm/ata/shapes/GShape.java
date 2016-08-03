@@ -15,6 +15,7 @@ import java.awt.geom.Point2D;
  * @author Darth-ATA
  */
 public interface GShape {
+    
     /**
      * For not filled shapes.
      */

@@ -9,7 +9,9 @@ import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
 
 /**
- *
+ * This class have all the attributes and methods needed for draw an rectangle
+ * with round corners.
+ * 
  * @author Darth-ATA
  */
 public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
@@ -17,10 +19,10 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
     //private GAttributes attributes;
     
     /**
-     * Constructor of the round rectangle shape.
+     * Constructor of the round rectangle.
      * 
-     * @param startPoint origin point of the shape.
-     * @param endPoint end point of the shape.
+     * @param startPoint origin point of the round rectangle.
+     * @param endPoint end point of the round rectangle.
      * @param arcw width of the round arc
      * @param arch height of the round arc
      */
