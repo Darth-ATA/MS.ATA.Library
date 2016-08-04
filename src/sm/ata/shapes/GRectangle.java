@@ -15,7 +15,14 @@ import java.awt.geom.Rectangle2D;
  */
 public class GRectangle extends Rectangle2D.Double implements GShape {    
     
-    //private GAttributes attributes;
+    private GAttribute attributes;
+    
+    /**
+     * Default constructor of the rectangle.
+     */
+    public GRectangle(){
+        attributes = new GAttribute();
+    };
     
     /**
      * Constructor of the rectangle.
@@ -27,8 +34,51 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
         super(startPoint.getX(),startPoint.getY(),
                 endPoint.getX() - startPoint.getX(),
                 endPoint.getY() - startPoint.getY());
-        //attributes = new GAttributes();
+        attributes = new GAttribute();
     }
+    
+    /**
+     * Constructor of the rectangle.
+     * 
+     * @param startPoint origin point of the rectangle.
+     * @param endPoint end point of the rectangle.
+     * @param attributes properties of the rectangle.
+     */
+    public GRectangle(Point2D startPoint, Point2D endPoint, GAttribute attributes){
+        super(startPoint.getX(), startPoint.getY(),
+                endPoint.getX() - startPoint.getX(),
+                endPoint.getY() - startPoint.getY());
+        this.attributes = attributes;
+    }
+    
+    /**
+     * Copy constructor of the rectangle.
+     * @param rectangle to be like.
+     */
+    public GRectangle(GRectangle rectangle){
+        super(rectangle.getStartPoint().getX(), rectangle.getEndPoint().getY(),
+                rectangle.getEndPoint().getX() - rectangle.getStartPoint().getY(),
+                rectangle.getEndPoint().getY() - rectangle.getStartPoint().getY());
+        this.attributes = rectangle.getAttributes();
+    }
+    
+    /**
+     * Creates and return a copy of the rectangle.
+     * @return the copy of the rectangle.
+     */
+    @Override
+    public GRectangle clone(){
+        return new GRectangle(this);
+    }
+    
+    /**
+     * Obtains the properties of the rectangle.
+     * @return an gAttribute with the properties of the rectangle.
+     */
+    public GAttribute getAttributes() {
+        return attributes;
+    }
+    
     /**
      * Obtains the start point of the rectangle.
      * 

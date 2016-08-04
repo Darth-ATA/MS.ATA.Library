@@ -16,7 +16,14 @@ import java.awt.geom.RoundRectangle2D;
  */
 public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
 
-    //private GAttributes attributes;
+    private GAttribute attributes;
+    
+    /**
+     * Default constructor of the round rectangle.
+     */
+    public GRoundRectangle(){
+        this.attributes = new GAttribute();
+    }
     
     /**
      * Constructor of the round rectangle.
@@ -32,7 +39,55 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
                 endPoint.getX() - startPoint.getX(),
                 endPoint.getY() - startPoint.getY(),
                 arcw, arch);
-        //attributes = new GAttributes();
+        attributes = new GAttribute();
+    }
+    
+    /**
+     * Constructor of the round rectangle.
+     * 
+     * @param startPoint origin point of the round rectangle.
+     * @param endPoint end point of the round rectangle.
+     * @param arcw width of the round arc.
+     * @param arch height of the round arc.
+     * @param attributes properties of the round rectangle.
+     */
+    public GRoundRectangle(Point2D startPoint, Point2D endPoint, 
+            double arcw, double arch,
+            GAttribute attributes){
+        super(startPoint.getX(), startPoint.getY(), 
+                endPoint.getX() - startPoint.getX(),
+                endPoint.getY() - startPoint.getY(),
+                arcw, arch);
+        this.attributes = attributes;
+    }
+    
+    /**
+     * Copy construcor of the round rectangle.
+     * @param roundRectangle to be like.
+     */
+    public GRoundRectangle(GRoundRectangle roundRectangle){
+        super(roundRectangle.getStartPoint().getX(), roundRectangle.getEndPoint().getY(),
+                roundRectangle.getEndPoint().getX() - roundRectangle.getStartPoint().getY(),
+                roundRectangle.getEndPoint().getY() - roundRectangle.getStartPoint().getY(),
+                roundRectangle.getArcWidth(), roundRectangle.getArcHeight());
+        this.attributes = roundRectangle.getAttributes();
+    }
+    
+    /**
+     * Creates and return a copy of the round rectangle.
+     * @return the copy of the round rectangle.
+     */
+    @Override
+    public GRoundRectangle clone(){
+        return new GRoundRectangle(this);
+    }
+    
+    /**
+     * Obtains the properties of the round rectangle.
+     * @return an gAttribute with the properties of the round rectangle.
+     */
+    public GAttribute getAttributes() {
+        return attributes;
     }
     
     /**

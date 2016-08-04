@@ -15,7 +15,7 @@ import java.awt.geom.Point2D;
  */
 public class GEllipse extends Ellipse2D.Double implements GShape {
     
-     //private GAttributes attributes;
+     private GAttribute attributes;
     
     /**
      * Constructor of the ellipse.
@@ -29,6 +29,15 @@ public class GEllipse extends Ellipse2D.Double implements GShape {
                 endPoint.getY() - startPoint.getY());
         //attributes = new GAttributes();
     }
+    
+    /**
+     * Obtains the properties of the ellipse.
+     * @return the properties of the ellipse.
+     */
+    public GAttribute getAttributes() {
+        return this.attributes;
+    }
+    
     /**
      * Obtains the start point of the ellipse.
      * 

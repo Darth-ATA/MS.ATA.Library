@@ -29,9 +29,9 @@ public interface GShape {
     /**
      * Obtains all the properties of the shape.
      * 
-     * @return an gAttribute with the attributes of the shapè.
+     * @return an gAttribute with the attributes of the shape.
      */
-    //public GAttribute getAttributes();
+    public GAttribute getAttributes();
     
     /**
      * Obtains the width of the shape.
@@ -66,5 +66,7 @@ public interface GShape {
      * 
      * @param startPoint new origin point of the shape.
      */
-    public void setShapePosition(Point2D startPoint);   
+    public void setShapePosition(Point2D startPoint);
+    
+    
 }
