@@ -306,9 +306,7 @@ public class Canvass2D extends javax.swing.JPanel {
         g2d.setRenderingHints(render);
         
         for (GShape s:vShape) {
-            if (fill) 
-                g2d.fill(s);     
-            g2d.draw(s);   
+            s.draw((Graphics2D) this.getGraphics());
         }
     }
     
@@ -317,8 +315,8 @@ public class Canvass2D extends javax.swing.JPanel {
      * @param p the point to search the figure
      * @return the figure in the provided point
      */
-    private Shape getSelectedShape(Point2D p){
-        for (Shape s:vShape)
+    private GShape getSelectedShape(Point2D p){
+        for (GShape s:vShape)
             if (s instanceof Line2D){
                 Line2D line = (Line2D) s;
                 if (line.ptLineDist(p) <= 5.0){
@@ -339,8 +337,8 @@ public class Canvass2D extends javax.swing.JPanel {
         switch (this.figureMode){
             case M_POINTS:      this.currentShape = new GRectangle(this.startPoint);
                                 break;
-            case M_LINES:       this.currentShape = new Line2D.Float(this.startPoint, this.startPoint);     
-                                break;
+            //case M_LINES:       this.currentShape = new Line2D.Float(this.startPoint, this.startPoint);     
+            //                    break;
             case M_RECTANGLES:  this.currentShape = new GRectangle(this.startPoint);
                                 break;
             case M_ELLIPSES:    this.currentShape = new GEllipse(this.startPoint.x, this.startPoint.y, 0, 0);

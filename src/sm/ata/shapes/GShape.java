@@ -6,7 +6,9 @@
 package sm.ata.shapes;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 
 /**
@@ -77,9 +79,22 @@ public interface GShape {
     
     /**
      * Updates the shape (redimensionations).
-     * @param startPoint new start point of the shape
-     * @param endPoint new end point of the shape
+     * @param startPoint new start point of the shape.
+     * @param endPoint new end point of the shape.
      */
     public void updateShape(Point2D startPoint, Point2D endPoint);
+    
+    /**
+     * Obtains the Rectangle that has the shape.
+     * @return Rectnagle object that has the shape.
+     */
+    public Rectangle getBounds();
+    
+    /**
+     * Informs if the a point is inside of the shape.
+     * @param point the point that wants to know if is in the shape.
+     * @return true or flase depending on the situation.
+     */
+    public boolean contains(Point2D point);
     
 }

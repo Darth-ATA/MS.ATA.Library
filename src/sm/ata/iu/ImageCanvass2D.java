@@ -6,7 +6,6 @@
 package sm.ata.iu;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,7 +13,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -28,6 +26,7 @@ import sm.ata.graphics.Canvass2D;
 import sm.image.KernelProducer;
 import sm.image.LookupTableProducer;
 import sm.ata.image.SepiaOp;
+import sm.ata.shapes.GShape;
 import sm.image.BinaryOp;
 import sm.image.BlendOp;
 import sm.image.SubtractionOp;
@@ -73,6 +72,7 @@ public class ImageCanvass2D extends Canvass2D {
             setPreferredSize(new Dimension(img.getWidth(),img.getHeight()));
     }
     
+    @Override
     public void paintComponent(Graphics g){
         if (this.img != null){
             super.setClip(new Rectangle(0,0,img.getWidth(),img.getHeight()));
@@ -109,10 +109,8 @@ public class ImageCanvass2D extends Canvass2D {
             }
             g2d.setRenderingHints(render);
 
-            for (Shape s:vShape) {
-                if (fill) 
-                    g2d.fill(s);     
-                g2d.draw(s);   
+            for (GShape s:vShape) {
+                s.draw((Graphics2D) this.getGraphics());
             }
             return img;
         }
