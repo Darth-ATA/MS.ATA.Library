@@ -7,7 +7,6 @@ package sm.ata.shapes;
 
 import java.awt.Color;
 import java.awt.Stroke;
-import java.util.logging.Logger;
 
 /**
  *
@@ -15,11 +14,18 @@ import java.util.logging.Logger;
  */
 public class GAttribute {
     
-    private int antialiasing;   
+    private static boolean ANTIALIASING_OFF = false;
+    private static boolean ANTIALIASING_ON = true;
+    
+    private static int FILL_OFF = 0;
+    private static int FILL_ON = 1;
+    private static int FILL_GRADIENT = 2;
+    
+    private boolean antialiasing;   
     private Stroke border;      
     private Color color;        
     private int fillMode;       
-    private int transparency;
+    private float transparency;
     
     /**
      * Default constructor.
@@ -34,7 +40,7 @@ public class GAttribute {
      * @param fillMode.
      * @param transparency .
      */
-    public GAttribute(int antialiasing, Stroke border, Color color, int fillMode,  int transparency){
+    public GAttribute(boolean antialiasing, Stroke border, Color color, int fillMode, float transparency){
         this.antialiasing = antialiasing;
         this.border = border;
         this.color = color;
@@ -67,7 +73,7 @@ public class GAttribute {
      * Obtains the antialiasing mode.
      * @return antialiasing mode.
      */
-    public int getAntialiasing() {
+    public boolean getAntialiasing() {
         return antialiasing;
     }
 
@@ -99,7 +105,7 @@ public class GAttribute {
      * Obtains the transparency mode.
      * @return transparency mode.
      */
-    public int getTransparency() {
+    public float getTransparency() {
         return transparency;
     }
 
@@ -107,7 +113,7 @@ public class GAttribute {
      * Sets the antialiasing value.
      * @param antialiasing value.
      */
-    public void setAntialiasing(int antialiasing) {
+    public void setAntialiasing(boolean antialiasing) {
         this.antialiasing = antialiasing;
     }
 
@@ -139,7 +145,7 @@ public class GAttribute {
      * Sets the transparency mode.
      * @param transparency mode.
      */
-    public void setTransparency(int transparency) {
+    public void setTransparency(float transparency) {
         this.transparency = transparency;
     }
 

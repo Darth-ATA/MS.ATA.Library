@@ -5,6 +5,10 @@
  */
 package sm.ata.shapes;
 
+import java.awt.AlphaComposite;
+import java.awt.Composite;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -107,4 +111,39 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
     public void setShapePosition(Point2D startPoint) {
        setFrame(startPoint.getX(), startPoint.getY(), getWidth(), getHeight());       
     }    
+
+    /**
+     * Draws the rectangle in the desired Graphics2D
+     * @param g2d Graphics2D where we want to draw the rectangle
+     */
+    @Override
+    public void draw(Graphics2D g2d) {
+        
+        // Stablish the color
+        g2d.setColor(this.attributes.getColor());
+        
+        // Stablish the border style
+        g2d.setStroke(this.attributes.getBorder());
+        
+        // Stablish the shape's transparency
+        Composite composite;
+        composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.attributes.getTransparency());
+        g2d.setComposite(composite);
+        
+        // Stablish the antialiasing mode
+        RenderingHints render;
+        if(this.attributes.getAntialiasing()){
+            render = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+        else{
+            render = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        }
+        
+        if(this.attributes.getFillMode() == 0){
+            g2d.draw(this);
+        }
+        else if (this.attributes.getFillMode() == 1){
+            g2d.fill(this);
+        }
+    }
 }

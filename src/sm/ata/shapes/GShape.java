@@ -5,6 +5,7 @@
  */
 package sm.ata.shapes;
 
+import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 
@@ -68,5 +69,10 @@ public interface GShape {
      */
     public void setShapePosition(Point2D startPoint);
     
+    /**
+     * Draw the shape in the desired Graphics2D
+     * @param g2d Graphics2D where we want to draw the shape
+     */
+    public void draw(Graphics2D g2d);
     
 }

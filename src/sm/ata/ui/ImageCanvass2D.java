@@ -27,6 +27,7 @@ import sm.ata.graphics.Canvass2D;
 import sm.image.KernelProducer;
 import sm.image.LookupTableProducer;
 import sm.ata.image.SepiaOp;
+import sm.ata.shapes.GShape;
 import sm.image.BinaryOp;
 import sm.image.BlendOp;
 import sm.image.SubtractionOp;
@@ -108,7 +109,7 @@ public class ImageCanvass2D extends Canvass2D {
             }
             g2d.setRenderingHints(render);
 
-            for (Shape s:vShape) {
+            for (GShape s:vShape) {
                 if (fill) 
                     g2d.fill(s);     
                 g2d.draw(s);   

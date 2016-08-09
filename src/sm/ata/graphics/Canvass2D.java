@@ -20,6 +20,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import sm.ata.shapes.GEllipse;
+import sm.ata.shapes.GRectangle;
+import sm.ata.shapes.GShape;
 
 /**
  *
@@ -32,9 +35,9 @@ public class Canvass2D extends javax.swing.JPanel {
     public static final int M_RECTANGLES = 2;
     public static final int M_ELLIPSES = 3;
     
-    protected ArrayList <Shape> vShape; // Container of the shapes in the canvass
+    protected ArrayList <GShape> vShape; // Container of the shapes in the canvass
     
-    private Shape currentShape;
+    private GShape currentShape;
     private Shape clip;
     
     protected Color color;
@@ -302,7 +305,7 @@ public class Canvass2D extends javax.swing.JPanel {
         }
         g2d.setRenderingHints(render);
         
-        for (Shape s:vShape) {
+        for (GShape s:vShape) {
             if (fill) 
                 g2d.fill(s);     
             g2d.draw(s);   
@@ -334,13 +337,13 @@ public class Canvass2D extends javax.swing.JPanel {
      */
     public void createShape(){
         switch (this.figureMode){
-            case M_POINTS:      this.currentShape = new Rectangle(this.startPoint);
+            case M_POINTS:      this.currentShape = new GRectangle(this.startPoint);
                                 break;
             case M_LINES:       this.currentShape = new Line2D.Float(this.startPoint, this.startPoint);     
                                 break;
-            case M_RECTANGLES:  this.currentShape = new Rectangle(this.startPoint);
+            case M_RECTANGLES:  this.currentShape = new GRectangle(this.startPoint);
                                 break;
-            case M_ELLIPSES:    this.currentShape = new Ellipse2D.Float(this.startPoint.x, this.startPoint.y, 0, 0);
+            case M_ELLIPSES:    this.currentShape = new GEllipse(this.startPoint.x, this.startPoint.y, 0, 0);
                                 break;
         }
         this.vShape.add(this.currentShape);      
