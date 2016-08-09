@@ -19,7 +19,10 @@ import java.awt.geom.RoundRectangle2D;
  * @author Darth-ATA
  */
 public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
-
+    
+    private Point2D startPoint;
+    private Point2D endPoint;
+    
     private GAttribute attributes;
     
     /**
@@ -43,7 +46,9 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
                 endPoint.getX() - startPoint.getX(),
                 endPoint.getY() - startPoint.getY(),
                 arcw, arch);
-        attributes = new GAttribute();
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.attributes = new GAttribute();
     }
     
     /**
@@ -62,6 +67,8 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
                 endPoint.getX() - startPoint.getX(),
                 endPoint.getY() - startPoint.getY(),
                 arcw, arch);
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
         this.attributes = attributes;
     }
     
@@ -74,6 +81,8 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
                 roundRectangle.getEndPoint().getX() - roundRectangle.getStartPoint().getY(),
                 roundRectangle.getEndPoint().getY() - roundRectangle.getStartPoint().getY(),
                 roundRectangle.getArcWidth(), roundRectangle.getArcHeight());
+        this.startPoint = roundRectangle.getStartPoint();
+        this.endPoint = roundRectangle.getEndPoint();
         this.attributes = roundRectangle.getAttributes();
     }
     
@@ -90,8 +99,9 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
      * Obtains the properties of the round rectangle.
      * @return an gAttribute with the properties of the round rectangle.
      */
+    @Override
     public GAttribute getAttributes() {
-        return attributes;
+        return this.attributes;
     }
     
     /**
@@ -99,9 +109,9 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
      * 
      * @return the left superior corner of the round rectangle.
      */
+    @Override
     public Point2D getStartPoint(){
-        Point2D startPoint = new Point2D.Double(this.getMinX(),this.getMaxY());
-        return startPoint;
+        return this.startPoint;
     }
     
     /**
@@ -109,18 +119,19 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
      * 
      * @return the right inferior corner of the round rectangle.
      */
+    @Override
     public Point2D getEndPoint() {
-        Point2D endPoint = new Point2D.Double(this.getMaxX(),this.getMinY());
-        return endPoint;
+        return this.endPoint;
     }
 
     /**
-     * Stablish a new start point of the round rectangle (move the round rectangle).
+     * Moves the round rectangle to another point.
      * 
-     * @param startPoint new origin point of the round rectanble.
+     * @param point new point of the round rectangle.
      */
-    public void setShapePosition(Point2D startPoint) {
-       setFrame(startPoint.getX(), startPoint.getY(), getWidth(), getHeight());       
+    @Override
+    public void moveShape(Point2D point) {
+       /**setFrame(startPoint.getX(), startPoint.getY(), getWidth(), getHeight());       */
     }
     
     
@@ -157,5 +168,17 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
         else if (this.attributes.getFillMode() == 1){
             g2d.fill(this);
         }
+    }
+    
+    /**
+     * Updates the round rectangle (redimensionations).
+     * @param startPoint new start point of the round rectangle.
+     * @param endPoint new end point of the round rectangle.
+     */
+    @Override
+    public void updateShape(Point2D startPoint, Point2D endPoint) {
+        this.setFrameFromDiagonal(startPoint, endPoint);
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
     }
 }

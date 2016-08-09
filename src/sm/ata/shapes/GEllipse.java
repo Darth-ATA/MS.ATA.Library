@@ -19,7 +19,10 @@ import java.awt.geom.Point2D;
  */
 public class GEllipse extends Ellipse2D.Double implements GShape {
     
-     private GAttribute attributes;
+    private Point2D startPoint;
+    private Point2D endPoint;
+    
+    private GAttribute attributes;
     
     /**
      * Constructor of the ellipse.
@@ -31,13 +34,16 @@ public class GEllipse extends Ellipse2D.Double implements GShape {
         super(startPoint.getX(),startPoint.getY(),
                 endPoint.getX() - startPoint.getX(),
                 endPoint.getY() - startPoint.getY());
-        //attributes = new GAttributes();
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.attributes = new GAttribute();
     }
     
     /**
      * Obtains the properties of the ellipse.
      * @return the properties of the ellipse.
      */
+    @Override
     public GAttribute getAttributes() {
         return this.attributes;
     }
@@ -47,9 +53,9 @@ public class GEllipse extends Ellipse2D.Double implements GShape {
      * 
      * @return the left superior corner of the ellipse.
      */
+    @Override
     public Point2D getStartPoint(){
-        Point2D startPoint = new Point2D.Double(this.getMinX(),this.getMaxY());
-        return startPoint;
+        return this.startPoint;
     }
     
     /**
@@ -57,20 +63,22 @@ public class GEllipse extends Ellipse2D.Double implements GShape {
      * 
      * @return the right inferior corner of the ellipse.
      */
+    @Override
     public Point2D getEndPoint() {
-        Point2D endPoint = new Point2D.Double(this.getMaxX(),this.getMinY());
-        return endPoint;
+        return this.endPoint;
     }
 
     /**
-     * Stablish a new start point of the ellipse (move the ellipse).
+     * Moves the ellipse to another point.
      * 
-     * @param startPoint new origin point of the ellipse.
+     * @param point new point of the ellipse.
      */
-    public void setShapePosition(Point2D startPoint) {
-       setFrame(startPoint.getX(), startPoint.getY(), getWidth(), getHeight());       
-    }        
-    
+    @Override
+    public void moveShape(Point2D point) {
+        /*Rectangle auxRectangle = this.getBounds();
+        Point point = new Point((int) endPoint.getX() + ((int) this.startPoint.getX() + (int) startPoint.getX()), (int) endPoint.getY() + ((int) this.startPoint.getY() + (int) startPoint.getY()));
+        auxRectangle.setLocation(point);    */
+    }           
     
     /**
      * Draws the ellipse in the desired Graphics2D
@@ -105,5 +113,17 @@ public class GEllipse extends Ellipse2D.Double implements GShape {
         else if (this.attributes.getFillMode() == 1){
             g2d.fill(this);
         }
+    }
+
+    /**
+     * Updates the ellipse (redimensionations).
+     * @param startPoint new start point of the ellipse.
+     * @param endPoint new end point of the ellipse.
+     */
+    @Override
+    public void updateShape(Point2D startPoint, Point2D endPoint) {
+        this.setFrameFromDiagonal(startPoint, endPoint);
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
     }
 }

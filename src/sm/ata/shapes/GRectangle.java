@@ -19,13 +19,16 @@ import java.awt.geom.Rectangle2D;
  */
 public class GRectangle extends Rectangle2D.Double implements GShape {    
     
+    private Point2D startPoint;
+    private Point2D endPoint;
+    
     private GAttribute attributes;
     
     /**
      * Default constructor of the rectangle.
      */
     public GRectangle(){
-        attributes = new GAttribute();
+        this.attributes = new GAttribute();
     };
     
     /**
@@ -38,7 +41,9 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
         super(startPoint.getX(),startPoint.getY(),
                 endPoint.getX() - startPoint.getX(),
                 endPoint.getY() - startPoint.getY());
-        attributes = new GAttribute();
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.attributes = new GAttribute();
     }
     
     /**
@@ -52,6 +57,8 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
         super(startPoint.getX(), startPoint.getY(),
                 endPoint.getX() - startPoint.getX(),
                 endPoint.getY() - startPoint.getY());
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
         this.attributes = attributes;
     }
     
@@ -63,6 +70,8 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
         super(rectangle.getStartPoint().getX(), rectangle.getEndPoint().getY(),
                 rectangle.getEndPoint().getX() - rectangle.getStartPoint().getY(),
                 rectangle.getEndPoint().getY() - rectangle.getStartPoint().getY());
+        this.startPoint = rectangle.getStartPoint();
+        this.endPoint = rectangle.getEndPoint();
         this.attributes = rectangle.getAttributes();
     }
     
@@ -79,8 +88,9 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
      * Obtains the properties of the rectangle.
      * @return an gAttribute with the properties of the rectangle.
      */
+    @Override
     public GAttribute getAttributes() {
-        return attributes;
+        return this.attributes;
     }
     
     /**
@@ -88,9 +98,9 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
      * 
      * @return the left superior corner of the rectangle.
      */
+    @Override
     public Point2D getStartPoint(){
-        Point2D startPoint = new Point2D.Double(this.getMinX(),this.getMaxY());
-        return startPoint;
+        return this.startPoint;
     }
     
     /**
@@ -98,18 +108,19 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
      * 
      * @return the right inferior corner of the rectangle.
      */
+    @Override
     public Point2D getEndPoint() {
-        Point2D endPoint = new Point2D.Double(this.getMaxX(),this.getMinY());
-        return endPoint;
+        return this.endPoint;
     }
 
     /**
-     * Stablish a new start point of the rectangle (move the rectangle).
+     * Moves the rectangle to another point.
      * 
-     * @param startPoint new origin point of the rectanble.
+     * @param point new point of the rectangle.
      */
-    public void setShapePosition(Point2D startPoint) {
-       setFrame(startPoint.getX(), startPoint.getY(), getWidth(), getHeight());       
+    @Override
+    public void moveShape(Point2D point) {
+       /**setFrame(startPoint.getX(), startPoint.getY(), getWidth(), getHeight());       */
     }    
 
     /**
@@ -145,5 +156,17 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
         else if (this.attributes.getFillMode() == 1){
             g2d.fill(this);
         }
+    }
+
+    /**
+     * Updates the rectangle (redimensionations).
+     * @param startPoint new start point of the rectangle.
+     * @param endPoint new end point of the rectangle.
+     */
+    @Override
+    public void updateShape(Point2D startPoint, Point2D endPoint) {
+        this.setFrameFromDiagonal(startPoint, endPoint);
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
     }
 }

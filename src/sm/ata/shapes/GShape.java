@@ -63,16 +63,23 @@ public interface GShape {
     public Point2D getEndPoint();
     
     /**
-     * Stablish a new start point of the shape (move the shape).
+     * Moves the shape to another point.
      * 
-     * @param startPoint new origin point of the shape.
+     * @param point new point of the shape.
      */
-    public void setShapePosition(Point2D startPoint);
+    public void moveShape(Point2D point);
     
     /**
-     * Draw the shape in the desired Graphics2D
-     * @param g2d Graphics2D where we want to draw the shape
+     * Draw the shape in the desired Graphics2D.
+     * @param g2d Graphics2D where we want to draw the shape.
      */
     public void draw(Graphics2D g2d);
+    
+    /**
+     * Updates the shape (redimensionations).
+     * @param startPoint new start point of the shape
+     * @param endPoint new end point of the shape
+     */
+    public void updateShape(Point2D startPoint, Point2D endPoint);
     
 }
