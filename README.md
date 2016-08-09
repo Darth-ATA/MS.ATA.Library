@@ -1,2 +1,2 @@
-# ATA-Multimedia-System
-Java application with some tools for images, sounds and videos
+# MS.ATA.Library
+Java library with some tools for images, sounds and videos
