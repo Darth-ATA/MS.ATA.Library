@@ -6,9 +6,9 @@
 package sm.ata.shapes;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 
 /**
@@ -67,9 +67,10 @@ public interface GShape {
     /**
      * Moves the shape to another point.
      * 
-     * @param point new point of the shape.
+     * @param startPoint
+     * @param endPoint
      */
-    public void moveShape(Point2D point);
+    public void moveShape(Point startPoint, Point endPoint);
     
     /**
      * Draw the shape in the desired Graphics2D.

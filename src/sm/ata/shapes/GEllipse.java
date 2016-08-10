@@ -8,6 +8,8 @@ package sm.ata.shapes;
 import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
@@ -74,11 +76,11 @@ public class GEllipse extends Ellipse2D.Double implements GShape {
      * @param point new point of the ellipse.
      */
     @Override
-    public void moveShape(Point2D point) {
-        /*Rectangle auxRectangle = this.getBounds();
-        Point point = new Point((int) endPoint.getX() + ((int) this.startPoint.getX() + (int) startPoint.getX()), (int) endPoint.getY() + ((int) this.startPoint.getY() + (int) startPoint.getY()));
-        auxRectangle.setLocation(point);    */
-    }           
+    public void moveShape(Point startPoint, Point endPoint) {
+        Point2D cornerPoint = this.getBounds().getLocation();
+        ((Rectangle) this.getBounds()).setLocation((int) endPoint.getX() + ((int) cornerPoint.getX() - startPoint.x),
+                                                   (int) endPoint.getY() + ((int) cornerPoint.getY() - startPoint.y));
+    }         
     
     /**
      * Draws the ellipse in the desired Graphics2D

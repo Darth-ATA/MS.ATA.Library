@@ -110,9 +110,7 @@ public class ImageCanvass2D extends Canvass2D {
             g2d.setRenderingHints(render);
 
             for (GShape s:vShape) {
-                if (fill) 
-                    g2d.fill(s);     
-                g2d.draw(s);   
+                s.draw((Graphics2D) this.getGraphics());   
             }
             return img;
         }

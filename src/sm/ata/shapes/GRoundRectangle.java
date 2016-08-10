@@ -8,6 +8,7 @@ package sm.ata.shapes;
 import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
@@ -132,10 +133,11 @@ public class GRoundRectangle extends RoundRectangle2D.Double implements GShape {
      * @param point new point of the round rectangle.
      */
     @Override
-    public void moveShape(Point2D point) {
-       /**setFrame(startPoint.getX(), startPoint.getY(), getWidth(), getHeight());       */
-    }
-    
+    public void moveShape(Point startPoint, Point endPoint) {
+        Point2D cornerPoint = this.getBounds().getLocation();
+        ((Rectangle) this.getBounds()).setLocation((int) endPoint.getX() + ((int) cornerPoint.getX() - startPoint.x),
+                                                   (int) endPoint.getY() + ((int) cornerPoint.getY() - startPoint.y));
+    }    
     
     /**
      * Draws the round rectangle in the desired Graphics2D

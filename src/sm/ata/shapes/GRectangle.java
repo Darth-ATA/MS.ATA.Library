@@ -8,9 +8,12 @@ package sm.ata.shapes;
 import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashSet;
 
 /**
  * This class have all the attributes and methods needed for draw an rectangle.
@@ -119,8 +122,27 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
      * @param point new point of the rectangle.
      */
     @Override
-    public void moveShape(Point2D point) {
-       /**setFrame(startPoint.getX(), startPoint.getY(), getWidth(), getHeight());       */
+    public void moveShape(Point startPoint, Point endPoint) {
+        /*double stdistX = endPoint.getX() + (this.startPoint.getX() - startPoint.getX());
+        double stdistY = endPoint.getY() + (this.startPoint.getY() - startPoint.getY());
+        
+        double endistX = endPoint.getX() - (-this.endPoint.getX() + startPoint.getX());
+        double endistY = endPoint.getY() - (-this.endPoint.getY() + startPoint.getY());
+        this.startPoint.setLocation(this.startPoint.getX() - stdistX, this.startPoint.getY() - stdistY);
+        this.endPoint.setLocation(this.endPoint.getX() - endistX, this.endPoint.getY() - endistY);
+        this.setFrameFromDiagonal(this.startPoint, this.endPoint);*/
+        
+        /*((Rectangle2D) this).setFrameFromDiagonal(this.startPoint + startPoint, endPoint);
+        System.out.println(startPoint.toString() + " - " + endPoint.toString());
+        Point2D cornerPoint = this.getBounds().getLocation();
+        System.out.println(cornerPoint.toString());
+        //Rectangle nuevo = this.getBounds();
+        ((Rectangle) this.getBounds()).setLocation((int) endPoint.getX() + ((int) cornerPoint.getX() - startPoint.x),
+                                                   (int) endPoint.getY() + ((int) cornerPoint.getY() - startPoint.y));
+        System.out.println("Antes de modificar" + this.startPoint.toString() + " - " + this.endPoint.toString());
+        this.startPoint = this.getStartPoint();
+        this.endPoint = this.getEndPoint();
+        System.out.println("Tras modificar" + this.startPoint.toString() + " - " + this.endPoint.toString());*/
     }    
 
     /**
@@ -129,7 +151,6 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
      */
     @Override
     public void draw(Graphics2D g2d) {
-        
         // Stablish the color
         g2d.setColor(this.attributes.getColor());
         
@@ -149,6 +170,8 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
         else{
             render = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
+        
+        g2d.setRenderingHints(render);
         
         if(this.attributes.getFillMode() == 0){
             g2d.draw(this);

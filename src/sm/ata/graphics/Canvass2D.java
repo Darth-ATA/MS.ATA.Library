@@ -20,6 +20,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import sm.ata.shapes.GAttribute;
 import sm.ata.shapes.GEllipse;
 import sm.ata.shapes.GRectangle;
 import sm.ata.shapes.GShape;
@@ -179,13 +180,17 @@ public class Canvass2D extends javax.swing.JPanel {
     }
     
     /**
-     * This method activates or desactivates the smooth status
+     * This method activates or desactivates the antialiashing.
      */
-    public void changeSmooth() {
-        if (this.smooth)
+    public void changeAntialiashing() {
+        if (this.smooth){
             this.smooth = false;
-        else
+            this.currentShape.getAttributes().setAntialiasing(GAttribute.ANTIALIASING_OFF);
+        }
+        else{
             this.smooth = true;
+            this.currentShape.getAttributes().setAntialiasing(GAttribute.ANTIALIASING_ON);
+        }
         this.repaint();
     }
     
@@ -254,10 +259,14 @@ public class Canvass2D extends javax.swing.JPanel {
      * This method activates or desactivates the fill draw mode.
      */
     public void changeFillMode(){
-        if (this.fill)
+        if (this.fill){
             this.fill = false;
-        else
+            this.currentShape.getAttributes().setFillMode(GAttribute.FILL_OFF);
+        }    
+        else{
             this.fill = true;
+            this.currentShape.getAttributes().setFillMode(GAttribute.FILL_ON);
+        }
         this.repaint();
     }
     
@@ -306,7 +315,7 @@ public class Canvass2D extends javax.swing.JPanel {
         g2d.setRenderingHints(render);
         
         for (GShape s:vShape) {
-            s.draw((Graphics2D) this.getGraphics());
+            s.draw(g2d);
         }
     }
     
@@ -335,13 +344,13 @@ public class Canvass2D extends javax.swing.JPanel {
      */
     public void createShape(){
         switch (this.figureMode){
-            case M_POINTS:      this.currentShape = new GRectangle(this.startPoint);
+            case M_POINTS:      this.currentShape = new GRectangle(this.startPoint,this.startPoint);
                                 break;
             //case M_LINES:       this.currentShape = new Line2D.Float(this.startPoint, this.startPoint);     
             //                    break;
-            case M_RECTANGLES:  this.currentShape = new GRectangle(this.startPoint);
+            case M_RECTANGLES:  this.currentShape = new GRectangle(this.startPoint, this.endPoint);
                                 break;
-            case M_ELLIPSES:    this.currentShape = new GEllipse(this.startPoint.x, this.startPoint.y, 0, 0);
+            case M_ELLIPSES:    this.currentShape = new GEllipse(this.startPoint,this.endPoint);
                                 break;
         }
         this.vShape.add(this.currentShape);      
@@ -351,14 +360,15 @@ public class Canvass2D extends javax.swing.JPanel {
      * This method updates the figure dimensions
      */
     public void updateShape(){
-        switch (this.figureMode){
+        this.currentShape.updateShape(this.startPoint, this.endPoint);
+        /*switch (this.figureMode){
             case M_LINES:       ((Line2D) this.currentShape).setLine(this.startPoint, this.endPoint);
                                 break;
             case M_RECTANGLES:  ((Rectangle) this.currentShape).setFrameFromDiagonal(this.startPoint, this.endPoint);
                                 break;
             case M_ELLIPSES:    ((Ellipse2D) this.currentShape).setFrameFromDiagonal(this.startPoint, this.endPoint);
                                 break;
-        }
+        }*/
     }
     
     /**
@@ -376,15 +386,17 @@ public class Canvass2D extends javax.swing.JPanel {
                               (int)auxPoint.getX() + ((int) this.cornerPoint.getX() - this.startPoint.x),
                               (int)auxPoint.getY() + ((int) this.cornerPoint.getY() - this.startPoint.y));
             }
-            else if (this.currentShape instanceof Rectangle){
-                ((Rectangle) this.currentShape).setLocation((int) this.endPoint.getX() + ((int) this.cornerPoint.getX() - this.startPoint.x),
-                                                            (int) this.endPoint.getY() + ((int) this.cornerPoint.getY() - this.startPoint.y));
+            else if (this.currentShape instanceof GRectangle){
+                this.currentShape.moveShape(this.startPoint, this.endPoint);
+                //((Rectangle) this.currentShape).setLocation((int) this.endPoint.getX() + ((int) this.cornerPoint.getX() - this.startPoint.x),
+                //                                            (int) this.endPoint.getY() + ((int) this.cornerPoint.getY() - this.startPoint.y));
             }
-            else if (this.currentShape instanceof Ellipse2D){
-                Rectangle auxRectangle = ((Ellipse2D) this.currentShape).getBounds();
-                auxRectangle.setLocation((int) this.endPoint.getX() + ((int) this.cornerPoint.getX() - this.startPoint.x),
-                                         (int) this.endPoint.getY() + ((int) this.cornerPoint.getY() - this.startPoint.y));
-                ((Ellipse2D) this.currentShape).setFrame(auxRectangle);
+            else if (this.currentShape instanceof GEllipse){
+                this.currentShape.moveShape(this.startPoint, this.endPoint);
+                //Rectangle auxRectangle = ((Ellipse2D) this.currentShape).getBounds();
+                //auxRectangle.setLocation((int) this.endPoint.getX() + ((int) this.cornerPoint.getX() - this.startPoint.x),
+                //                         (int) this.endPoint.getY() + ((int) this.cornerPoint.getY() - this.startPoint.y));
+                //((Ellipse2D) this.currentShape).setFrame(auxRectangle);
             }
         }
     }
@@ -433,6 +445,7 @@ public class Canvass2D extends javax.swing.JPanel {
     private void canvassMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvassMousePressed
         // TODO add your handling code here:
         this.startPoint = evt.getPoint();
+        this.endPoint = evt.getPoint();
         if (this.editMode){
             currentShape = getSelectedShape(this.startPoint);
             if (this.currentShape != null)

@@ -5,8 +5,10 @@
  */
 package sm.ata.shapes;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
+import java.awt.color.ColorSpace;
 
 /**
  *
@@ -14,12 +16,12 @@ import java.awt.Stroke;
  */
 public class GAttribute {
     
-    private static boolean ANTIALIASING_OFF = false;
-    private static boolean ANTIALIASING_ON = true;
+    public static boolean ANTIALIASING_OFF = false;
+    public static boolean ANTIALIASING_ON = true;
     
-    private static int FILL_OFF = 0;
-    private static int FILL_ON = 1;
-    private static int FILL_GRADIENT = 2;
+    public static int FILL_OFF = 0;
+    public static int FILL_ON = 1;
+    public static int FILL_GRADIENT = 2;
     
     private boolean antialiasing;   
     private Stroke border;      
@@ -30,7 +32,13 @@ public class GAttribute {
     /**
      * Default constructor.
      */
-    public GAttribute(){}
+    public GAttribute(){
+        this.antialiasing = ANTIALIASING_OFF;
+        this.border = new BasicStroke(0);
+        this.color = Color.BLACK;
+        this.fillMode = 0;
+        this.transparency = 1.0f;
+    }
     
     /**
      * Constructor of the attribute.
@@ -118,11 +126,19 @@ public class GAttribute {
     }
 
     /**
-     * Sets the border mode.
+     * Sets the border mode stablishing the Stroke.
      * @param border value.
      */
     public void setBorder(Stroke border) {
         this.border = border;
+    }
+    
+    /**
+     * Sets the border mode.
+     * @param border value.
+     */
+    public void setBorder(float border) {
+        this.border = new BasicStroke(border);
     }
 
     /**
