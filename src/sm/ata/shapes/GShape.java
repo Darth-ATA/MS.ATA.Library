@@ -20,6 +20,15 @@ import java.awt.geom.Point2D;
 public interface GShape {
     
     /**
+     * First corner of the shape
+     */
+    public final static int FIRST_CORNER = 0;
+    /**
+     * Second corner of the shape
+     */
+    public final static int SECOND_CORNER = 1;
+    
+    /**
      * For not filled shapes.
      */
     public final static int NOT_FILLED = 0;
@@ -35,20 +44,6 @@ public interface GShape {
      * @return an gAttribute with the attributes of the shape.
      */
     public GAttribute getAttributes();
-    
-    /**
-     * Obtains the width of the shape.
-     * 
-     * @return the width of the shape.
-     */
-    public double getWidth();
-    
-    /**
-     * Obtains the heigth of the shape.
-     * 
-     * @return the height of the shape.
-     */
-    public double getHeight();
     
     /**
      * Obtains the start point of the shape.
@@ -67,10 +62,9 @@ public interface GShape {
     /**
      * Moves the shape to another point.
      * 
-     * @param startPoint
-     * @param endPoint
+     * @param pos
      */
-    public void moveShape(Point startPoint, Point endPoint);
+    public void moveShape(Point2D pos);
     
     /**
      * Draw the shape in the desired Graphics2D.
@@ -92,10 +86,17 @@ public interface GShape {
     public Rectangle getBounds();
     
     /**
-     * Informs if the a point is inside of the shape.
+     * Informs if the point is inside of the shape.
      * @param point the point that wants to know if is in the shape.
      * @return true or flase depending on the situation.
      */
     public boolean contains(Point2D point);
+    
+    /**
+     * Obtains some interesting points of the shape.
+     * @param index what point it wants to take
+     * @return the interest point.
+     */
+    public Point2D getInterestPoint(int index);
     
 }

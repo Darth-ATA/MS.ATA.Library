@@ -9,80 +9,73 @@ import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.HashSet;
 
 /**
- * This class have all the attributes and methods needed for draw a rectangle.
- *
- * @author Darth-ATA
+ * This class have all the attributes and methods needed for draw a point.
+ * 
+ * @author DarthATA
  */
-public class GRectangle extends Rectangle2D.Double implements GShape {    
-      
+public class GPoint extends Rectangle2D.Double implements GShape {
     private GAttribute attributes;
     
     /**
-     * Default constructor of the rectangle.
+     * Default constructor of the point.
      */
-    public GRectangle(){
+    public GPoint(){
         this.attributes = new GAttribute();
     };
     
     /**
-     * Constructor of the rectangle.
+     * Constructor of the point.
      * 
-     * @param startPoint origin point of the rectangle.
-     * @param endPoint end point of the rectangle.
+     * @param startPoint origin point of the point.
      */
-    public GRectangle(Point2D startPoint, Point2D endPoint){
+    public GPoint(Point2D startPoint){
         super(startPoint.getX(),startPoint.getY(),
-                endPoint.getX() - startPoint.getX(),
-                endPoint.getY() - startPoint.getY());
+                startPoint.getX() - startPoint.getX(),
+                startPoint.getY() - startPoint.getY());
         this.attributes = new GAttribute();
     }
     
     /**
-     * Constructor of the rectangle.
+     * Constructor of the point.
      * 
-     * @param startPoint origin point of the rectangle.
-     * @param endPoint end point of the rectangle.
-     * @param attributes properties of the rectangle.
+     * @param startPoint origin point of the point.
+     * @param attributes properties of the point.
      */
-    public GRectangle(Point2D startPoint, Point2D endPoint, GAttribute attributes){
+    public GPoint(Point2D startPoint, GAttribute attributes){
         super(startPoint.getX(), startPoint.getY(),
-                endPoint.getX() - startPoint.getX(),
-                endPoint.getY() - startPoint.getY());
+                startPoint.getX() - startPoint.getX(),
+                startPoint.getY() - startPoint.getY());
         this.attributes = attributes;
     }
     
     /**
-     * Copy constructor of the rectangle.
-     * @param rectangle to be like.
+     * Copy constructor of the point.
+     * @param point to be like.
      */
-    public GRectangle(GRectangle rectangle){
-        super(rectangle.getStartPoint().getX(), rectangle.getEndPoint().getY(),
-                rectangle.getEndPoint().getX() - rectangle.getStartPoint().getY(),
-                rectangle.getEndPoint().getY() - rectangle.getStartPoint().getY());
-        this.attributes = rectangle.getAttributes();
+    public GPoint(GPoint point){
+        super(point.getStartPoint().getX(), point.getEndPoint().getY(),
+                point.getEndPoint().getX() - point.getStartPoint().getY(),
+                point.getEndPoint().getY() - point.getStartPoint().getY());
+        this.attributes = point.getAttributes();
     }
     
     /**
-     * Creates and return a copy of the rectangle.
-     * @return the copy of the rectangle.
+     * Creates and return a copy of the point.
+     * @return the copy of the point.
      */
     @Override
-    public GRectangle clone(){
-        return new GRectangle(this);
+    public GPoint clone(){
+        return new GPoint(this);
     }
     
     /**
-     * Obtains the properties of the rectangle.
-     * @return an gAttribute with the properties of the rectangle.
+     * Obtains the properties of the point.
+     * @return an gAttribute with the properties of the point.
      */
     @Override
     public GAttribute getAttributes() {
@@ -90,9 +83,9 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
     }
     
     /**
-     * Obtains the start point of the rectangle.
+     * Obtains the start point of the point.
      * 
-     * @return the left superior corner of the rectangle.
+     * @return the left superior corner of the point.
      */
     @Override
     public Point2D getStartPoint(){
@@ -101,9 +94,9 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
     }
     
     /**
-     * Obtains the end point of the rectangle.
+     * Obtains the end point of the point.
      * 
-     * @return the right inferior corner of the rectangle.
+     * @return the right inferior corner of the point.
      */
     @Override
     public Point2D getEndPoint() {
@@ -112,20 +105,20 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
     }
 
     /**
-     * Moves the rectangle to another point.
+     * Moves the point to another point.
      * 
-     * @param pos the reference point for the traslation of the rectangle.
+     * @param pos the reference point for the traslation of the point.
      */
     @Override
     public void moveShape(Point2D pos) {
-        GRectangle rectangle = this;
-        Dimension dim = new Dimension((int) rectangle.getWidth(), (int) rectangle.getHeight());
-        rectangle.setFrame(pos, dim);
+        GPoint point = this;
+        Dimension dim = new Dimension((int) point.getWidth(), (int) point.getHeight());
+        point.setFrame(pos, dim);
     }    
 
     /**
-     * Draws the rectangle in the desired Graphics2D
-     * @param g2d Graphics2D where we want to draw the rectangle
+     * Draws the point in the desired Graphics2D
+     * @param g2d Graphics2D where we want to draw the point
      */
     @Override
     public void draw(Graphics2D g2d) {
@@ -160,17 +153,17 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
     }
 
     /**
-     * Updates the rectangle (redimensionations).
-     * @param startPoint new start point of the rectangle.
-     * @param endPoint new end point of the rectangle.
+     * Updates the point (redimensionations).
+     * @param startPoint new start point of the point.
+     * @param endPoint new end point of the point.
      */
     @Override
     public void updateShape(Point2D startPoint, Point2D endPoint) {
-        this.setFrameFromDiagonal(startPoint, endPoint);
+        this.setFrameFromDiagonal(endPoint, endPoint);
     }
     
     /**
-     * Obtains the corners of the rectangle, used for move the rectangle.
+     * Obtains the corners of the point, used for move the point.
      * @param index of the corner (0 for left top and 1 for right bot)
      * @return the corner desired.
      */
@@ -183,5 +176,16 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
             point = new Point2D.Double(this.getBounds().x + this.getBounds().width,
                 this.getBounds().y + this.getBounds().height);
         return point;
+    }
+    
+    /**
+     * Informs if a point is close to the point..
+     * @param point the point that wants to know if is close the shape.
+     * @return true or flase depending on the situation.
+     */
+    @Override
+    public boolean contains(Point2D point){
+        Point2D aux = new Point2D.Double(this.getStartPoint().getX(), this.getStartPoint().getY());
+        return aux.distance(point) <= 9.0 / 2;  //+border_width
     }
 }
