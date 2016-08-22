@@ -14,7 +14,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * This class have all the attributes and methods needed for draw a point.
+ * This class has all the attributes and methods needed for draw a point.
  * 
  * @author DarthATA
  */

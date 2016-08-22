@@ -11,7 +11,7 @@ import java.awt.Stroke;
 import java.awt.color.ColorSpace;
 
 /**
- *
+ * This class provide an object that encapsulates all the GShapes properties.
  * @author Darth-ATA
  */
 public class GAttribute {

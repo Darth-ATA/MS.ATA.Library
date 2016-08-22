@@ -7,15 +7,13 @@ package sm.ata.shapes;
 
 import java.awt.AlphaComposite;
 import java.awt.Composite;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 /**
- * This class have all the attributes and methods needed for draw a ellipse.
+ * This class has all the attributes and methods needed for draw a ellipse.
  * 
  * @author Darth-ATA
  */
