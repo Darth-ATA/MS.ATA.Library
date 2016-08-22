@@ -6,6 +6,7 @@
 package sm.ata.shapes;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -187,5 +188,14 @@ public class GPoint extends Rectangle2D.Double implements GShape {
     public boolean contains(Point2D point){
         Point2D aux = new Point2D.Double(this.getStartPoint().getX(), this.getStartPoint().getY());
         return aux.distance(point) <= 9.0 / 2;  //+border_width
+    }
+    
+    /**
+     * Stablish the attributes of the point.
+     * @param attributes wanted for the point.
+     */
+    @Override
+    public void setAttributes(GAttribute attributes){
+        this.attributes = new GAttribute(attributes);
     }
 }

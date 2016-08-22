@@ -6,6 +6,7 @@
 package sm.ata.shapes;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -137,5 +138,14 @@ public class GEllipse extends Ellipse2D.Double implements GShape {
             point = new Point2D.Double(this.getBounds().x + this.getBounds().width,
                 this.getBounds().y + this.getBounds().height);
         return point;
+    }
+    
+    /**
+     * Stablish the attributes of the ellipse.
+     * @param attributes wanted for the ellipse.
+     */
+    @Override
+    public void setAttributes(GAttribute attributes){
+        this.attributes = new GAttribute(attributes);
     }
 }

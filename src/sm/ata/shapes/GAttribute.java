@@ -8,7 +8,6 @@ package sm.ata.shapes;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
-import java.awt.color.ColorSpace;
 
 /**
  * This class provide an object that encapsulates all the GShapes properties.
@@ -24,6 +23,7 @@ public class GAttribute {
     public static int FILL_GRADIENT = 2;
     
     private boolean antialiasing;   
+    private float thick;
     private Stroke border;      
     private Color color;        
     private int fillMode;       
@@ -34,10 +34,27 @@ public class GAttribute {
      */
     public GAttribute(){
         this.antialiasing = ANTIALIASING_OFF;
+        this.thick  = 0;
         this.border = new BasicStroke(0);
         this.color = Color.BLACK;
         this.fillMode = 0;
         this.transparency = 1.0f;
+    }
+    
+    /**
+     * Constructor of the attribute.
+     * @param antialiasing.
+     * @param border.
+     * @param color.
+     * @param fillMode.
+     * @param transparency .
+     */
+    public GAttribute(boolean antialiasing, float border, Color color, int fillMode, float transparency){
+        this.antialiasing = antialiasing;
+        this.border = new BasicStroke(border);
+        this.color = color;
+        this.fillMode = fillMode;
+        this.transparency = transparency;
     }
     
     /**
@@ -65,6 +82,8 @@ public class GAttribute {
         this.fillMode = attribute.fillMode;
         this.antialiasing = attribute.antialiasing;
         this.transparency = attribute.transparency;
+        this.thick = attribute.thick;
+        this.border = attribute.border;
     }
     
     /**
@@ -82,7 +101,7 @@ public class GAttribute {
      * @return antialiasing mode.
      */
     public boolean getAntialiasing() {
-        return antialiasing;
+        return this.antialiasing;
     }
 
     /**
@@ -90,7 +109,15 @@ public class GAttribute {
      * @return border style.
      */
     public Stroke getBorder() {
-        return border;
+        return this.border;
+    }
+    
+    /**
+     * Obtains the thick float.
+     * @return thick float.
+     */
+    public float getThick(){
+        return this.thick;
     }
 
     /**
@@ -98,7 +125,7 @@ public class GAttribute {
      * @return color vector.
      */
     public Color getColor() {
-        return color;
+        return this.color;
     }
 
     /**
@@ -106,7 +133,7 @@ public class GAttribute {
      * @return fill mode.
      */
     public int getFillMode() {
-        return fillMode;
+        return this.fillMode;
     }
 
     /**
@@ -114,7 +141,7 @@ public class GAttribute {
      * @return transparency mode.
      */
     public float getTransparency() {
-        return transparency;
+        return this.transparency;
     }
 
     /**
@@ -134,11 +161,12 @@ public class GAttribute {
     }
     
     /**
-     * Sets the border mode.
-     * @param border value.
+     * Sets thick value.
+     * @param thick float value.
      */
-    public void setBorder(float border) {
-        this.border = new BasicStroke(border);
+    public void setThick(float thick) {
+        this.thick = thick;
+        this.border = new BasicStroke(thick);
     }
 
     /**
@@ -164,5 +192,4 @@ public class GAttribute {
     public void setTransparency(float transparency) {
         this.transparency = transparency;
     }
-
 }

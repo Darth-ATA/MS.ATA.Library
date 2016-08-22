@@ -5,6 +5,7 @@
  */
 package sm.ata.shapes;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -97,5 +98,11 @@ public interface GShape {
      * @return the interest point.
      */
     public Point2D getInterestPoint(int index);
+    
+    /**
+     * Stablish the attributes of the shape.
+     * @param attributes wanted for the shape.
+     */
+    public void setAttributes(GAttribute attributes);
     
 }

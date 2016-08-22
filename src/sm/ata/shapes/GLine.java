@@ -6,6 +6,7 @@
 package sm.ata.shapes;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -183,5 +184,14 @@ public class GLine extends Line2D.Double implements GShape {
             point = this.getP2();
         }
         return point;
+    }
+    
+    /**
+     * Stablish the attributes of the line.
+     * @param attributes wanted for the line.
+     */
+    @Override
+    public void setAttributes(GAttribute attributes){
+        this.attributes = new GAttribute(attributes);
     }
 }

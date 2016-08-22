@@ -14,6 +14,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import sm.ata.shapes.GArc;
 import sm.ata.shapes.GAttribute;
 import sm.ata.shapes.GEllipse;
 import sm.ata.shapes.GLine;
@@ -32,19 +33,22 @@ public class Canvass2D extends javax.swing.JPanel {
     public static final int M_LINES = 1;
     public static final int M_RECTANGLES = 2;
     public static final int M_ELLIPSES = 3;
+    public static final int M_ARC = 4;
     
     protected ArrayList <GShape> vShape; // Container of the shapes in the canvass
     
     private GShape currentShape;
     private Shape clip;
     
-    protected Color color;
-    protected boolean fill;
+    private GAttribute attributes;
+    
+    /*protected Color color;
+    protected boolean fill;*/
     private int thick;
     
-    protected Stroke stroke;
+    /*protected Stroke stroke;
     protected boolean smooth;
-    protected boolean transparency;
+    protected boolean transparency;*/
     
     private Point2D pressPoint;
     private Point2D cornerPoint;
@@ -59,14 +63,15 @@ public class Canvass2D extends javax.swing.JPanel {
     public Canvass2D() {
         initComponents();
         this.vShape = new ArrayList();
-        this.stroke = new BasicStroke(thick);
+        this.attributes = new GAttribute();
+        //this.stroke = new BasicStroke(thick);
         this.drawMode = M_POINTS;
         this.editMode = false;
-        this.color = Color.BLACK;
-        this.fill = false;
+        //this.color = Color.BLACK;
+        //this.fill = false;
         this.thick = 1;
-        this.smooth = false;
-        this.transparency = false;
+        //this.smooth = false;
+        //this.transparency = false;
     }
     
     // Getters
@@ -75,31 +80,31 @@ public class Canvass2D extends javax.swing.JPanel {
      * @return color of the canvass.
      */
     public Color getColor(){
-        return this.color;
+        return this.attributes.getColor();
     }
     
     /**
      * This method provides the status of fill of the canvass
-     * @return fill status of the canvass
+     * @return fill mode of the canvass
      */
-    public boolean isFill() {
-        return fill;
+    public int getFillMode() {
+        return this.attributes.getFillMode();
     }
     
     /**
      * This method provides the thickness of the canvass
      * @return thick number of the canvass
      */
-    public int getThick() {
-        return thick;
+    public float getThick() {
+        return this.attributes.getThick();
     }
     
     /**
      * This method provides the stroke of the canvass
      * @return stroke of the canvass
      */
-    public Stroke getStroke() {
-        return stroke;
+    public Stroke getStroke(){
+        return this.attributes.getBorder();
     }
     
     /**
@@ -107,15 +112,15 @@ public class Canvass2D extends javax.swing.JPanel {
      * @return smooth status of the canvass
      */
     public boolean isSmooth() {
-        return smooth;
+        return this.attributes.getAntialiasing();
     }
     
     /**
-     * this method provides the transparency status of the canvass
-     * @return transparency status of the canvass
+     * This method provides the transparency value of the canvass
+     * @return transparency value of the canvass
      */
-    public boolean isTransparency() {
-        return smooth;
+    public float getTransparency() {
+        return this.attributes.getTransparency();
     }
     
     /**
@@ -142,6 +147,7 @@ public class Canvass2D extends javax.swing.JPanel {
         return this.figureMode;
     }
     
+    // TPODO: BORRAR SI NO LO USAMOS
     /**
      * This method provides the start point
      * @return start point of the canvass
@@ -171,42 +177,53 @@ public class Canvass2D extends javax.swing.JPanel {
      * @param thick of the canvass
      */
     public void setThick(int thick) {
-        this.stroke = new BasicStroke(thick);
-        this.repaint();
+        this.attributes.setThick(thick);
+        if(this.currentShape != null){
+            this.currentShape.setAttributes(this.attributes);
+            this.repaint();
+        }
     }
     
     /**
      * This method activates or desactivates the antialiashing.
      */
     public void changeAntialiashing() {
-        if (this.smooth){
-            this.smooth = false;
-            this.currentShape.getAttributes().setAntialiasing(GAttribute.ANTIALIASING_OFF);
+        if (this.attributes.getAntialiasing()){
+            this.attributes.setAntialiasing(false);
+            //this.currentShape.getAttributes().setAntialiasing(GAttribute.ANTIALIASING_OFF);
         }
         else{
-            this.smooth = true;
-            this.currentShape.getAttributes().setAntialiasing(GAttribute.ANTIALIASING_ON);
+            this.attributes.setAntialiasing(true);
+            //this.currentShape.getAttributes().setAntialiasing(GAttribute.ANTIALIASING_ON);
         }
-        this.repaint();
+        if(this.currentShape != null){
+            this.currentShape.setAttributes(this.attributes);
+            this.repaint();
+        }
     }
     
     /**
      * This method activates or desactivates the transparency status
+     * @param transparency value to be set.
      */
-    public void changeTransparency() {
-        if (this.transparency)
-            this.transparency = false;
-        else
-            this.transparency = true;
-        this.repaint();
+    public void setTransparency(float transparency) {
+        this.attributes.setTransparency(transparency);
+        if(this.currentShape != null){
+            this.currentShape.setAttributes(this.attributes);
+            this.repaint();
+        }
     }
     
     /**
-     * @param color: Color whose you want paint
      * This method changes the color used by the canvass.
+     * @param color: Color whose you want paint
      */
     public void setColor(Color color){
-        this.color = color;
+        this.attributes.setColor(color);
+        if(this.currentShape != null){
+            this.currentShape.setAttributes(this.attributes);
+            this.repaint();
+        }
     }
     
     /**
@@ -214,7 +231,11 @@ public class Canvass2D extends javax.swing.JPanel {
      * @param stroke change the stroke used by the canvass
      */
     public void setStroke(Stroke stroke) {
-        this.stroke = stroke;
+        this.attributes.setBorder(stroke);
+        if(this.currentShape != null){
+            this.currentShape.setAttributes(this.attributes);
+            this.repaint();
+        }
     }
     
     /**
@@ -252,18 +273,15 @@ public class Canvass2D extends javax.swing.JPanel {
     }
     
     /**
-     * This method activates or desactivates the fill draw mode.
+     * This method change the fill draw mode.
+     * @param fillMode to be set.
      */
-    public void changeFillMode(){
-        if (this.fill){
-            this.fill = false;
-            this.currentShape.getAttributes().setFillMode(GAttribute.FILL_OFF);
-        }    
-        else{
-            this.fill = true;
-            this.currentShape.getAttributes().setFillMode(GAttribute.FILL_ON);
+    public void setFillMode(int fillMode){
+        this.attributes.setFillMode(fillMode);
+        if(this.currentShape != null){
+            this.currentShape.setAttributes(this.attributes);
+            this.repaint();
         }
-        this.repaint();
     }
     
     /**
@@ -311,7 +329,7 @@ public class Canvass2D extends javax.swing.JPanel {
     
     /**
      * This method creates the shape depend on the figure mode
-     * (M_POINTS, M_LINES, M_RECTANGLES or M_ELLIPSE)
+     * (M_POINTS, M_LINES, M_RECTANGLES, M_ELLIPSE, M_ARC)
      */
     public void createShape(Point2D point){
         switch (this.figureMode){
@@ -323,8 +341,11 @@ public class Canvass2D extends javax.swing.JPanel {
                                 break;
             case M_ELLIPSES:    this.currentShape = new GEllipse(point, point);
                                 break;
+            case M_ARC:         this.currentShape = new GArc(point, point);
+                                break;
         }
-        this.vShape.add(this.currentShape);      
+        this.currentShape.setAttributes(this.attributes);
+        this.vShape.add(this.currentShape);
     }
     
     /**
@@ -391,8 +412,10 @@ public class Canvass2D extends javax.swing.JPanel {
         
         if (this.editMode){
             currentShape = getSelectedShape(evt.getPoint());
-            if (this.currentShape != null)
+            if (this.currentShape != null){
                 this.cornerPoint = this.currentShape.getInterestPoint(FIRST_CORNER);
+                this.currentShape.setAttributes(this.attributes);
+            }
         }
         else
             this.createShape(evt.getPoint());

@@ -6,6 +6,7 @@
 package sm.ata.shapes;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -69,6 +70,9 @@ public class GArc extends Arc2D.Double implements GShape {
         this.attributes = attributes;
     }
     
+    /** ToDO: Use this constructor for do a a better arc creation
+     * 
+     */
     /**
      * Constructor of the arc.
      * @param startPoint origin of the arc.
@@ -207,5 +211,14 @@ public class GArc extends Arc2D.Double implements GShape {
             point = new Point2D.Double(this.getBounds().x + this.getBounds().width,
                 this.getBounds().y + this.getBounds().height);
         return point;
-    }  
+    } 
+    
+    /**
+     * Stablish the attributes of the arc.
+     * @param attributes wanted for the arc.
+     */
+    @Override
+    public void setAttributes(GAttribute attributes){
+        this.attributes = new GAttribute(attributes);
+    }
 }

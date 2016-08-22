@@ -88,20 +88,16 @@ public class ImageCanvass2D extends Canvass2D {
     public BufferedImage getImg(boolean drawVector){
         if (drawVector){
             Graphics2D g2d = (Graphics2D) img.getGraphics();
-            g2d.setPaint(color);
-            g2d.setStroke(stroke);
+            g2d.setPaint(this.getColor());
+            g2d.setStroke(this.getStroke());
 
             Composite composite;
-            if (this.transparency){
-                composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
-            }
-            else{
-                composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
-            }
+            composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.getTransparency());
+            
             g2d.setComposite(composite);
 
             RenderingHints render;
-            if (smooth){
+            if (this.isSmooth()){
                 render = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             }
             else {
@@ -110,7 +106,7 @@ public class ImageCanvass2D extends Canvass2D {
             g2d.setRenderingHints(render);
 
             for (GShape s:vShape) {
-                s.draw((Graphics2D) this.getGraphics());   
+                s.draw((Graphics2D) this.getGraphics());
             }
             return img;
         }
