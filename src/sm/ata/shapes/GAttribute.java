@@ -22,10 +22,16 @@ public class GAttribute {
     public static int FILL_ON = 1;
     public static int FILL_GRADIENT = 2;
     
+    public static int HORIZONTAL_GRADIENT = 0;
+    public static int VERTICAL_GRADIENT = 1;
+    public static int DIAGONAL_GRADIENT = 2;
+    
     private boolean antialiasing;   
     private float thick;
     private Stroke border;      
-    private Color color;        
+    private Color color; 
+    private Color gradientColor;
+    private int gradientType;
     private int fillMode;       
     private float transparency;
     
@@ -34,9 +40,11 @@ public class GAttribute {
      */
     public GAttribute(){
         this.antialiasing = ANTIALIASING_OFF;
-        this.thick  = 0;
+        this.thick  = 1;
         this.border = new BasicStroke(0);
         this.color = Color.BLACK;
+        this.gradientColor = Color.WHITE;
+        this.gradientType = HORIZONTAL_GRADIENT;
         this.fillMode = 0;
         this.transparency = 1.0f;
     }
@@ -46,13 +54,17 @@ public class GAttribute {
      * @param antialiasing.
      * @param border.
      * @param color.
+     * @param gradientColor.
+     * @param gradientType.
      * @param fillMode.
      * @param transparency .
      */
-    public GAttribute(boolean antialiasing, float border, Color color, int fillMode, float transparency){
+    public GAttribute(boolean antialiasing, float border, Color color, Color gradientColor, int gradientType, int fillMode, float transparency){
         this.antialiasing = antialiasing;
         this.border = new BasicStroke(border);
         this.color = color;
+        this.gradientColor = gradientColor;
+        this.gradientType = gradientType;
         this.fillMode = fillMode;
         this.transparency = transparency;
     }
@@ -62,13 +74,17 @@ public class GAttribute {
      * @param antialiasing.
      * @param border.
      * @param color.
+     * @param gradientColor.
+     * @param gradientType.
      * @param fillMode.
      * @param transparency .
      */
-    public GAttribute(boolean antialiasing, Stroke border, Color color, int fillMode, float transparency){
+    public GAttribute(boolean antialiasing, Stroke border, Color color, Color gradientColor, int gradientType, int fillMode, float transparency){
         this.antialiasing = antialiasing;
         this.border = border;
         this.color = color;
+        this.gradientColor = gradientColor;
+        this.gradientType = gradientType;
         this.fillMode = fillMode;
         this.transparency = transparency;
     }
@@ -79,6 +95,8 @@ public class GAttribute {
      */
     public GAttribute(GAttribute attribute){
         this.color = attribute.color;
+        this.gradientColor = attribute.gradientColor;
+        this.gradientType = attribute.gradientType;
         this.fillMode = attribute.fillMode;
         this.antialiasing = attribute.antialiasing;
         this.transparency = attribute.transparency;
@@ -126,6 +144,22 @@ public class GAttribute {
      */
     public Color getColor() {
         return this.color;
+    }
+    
+    /**
+     * Obtains the gradient color vector.
+     * @return color vector.
+     */
+    public Color getGradientColor(){
+        return this.gradientColor;
+    }
+    
+    /**
+     * Obtains the gradient type.
+     * @return gradient type.
+     */
+    public int getGradientType(){
+        return this.gradientType;
     }
 
     /**
@@ -176,6 +210,22 @@ public class GAttribute {
     public void setColor(Color color) {
         this.color = color;
     }
+    
+    /**
+     * Sets the gradient color value
+     * @param gradientColor value
+     */
+    public void setGradientColor(Color gradientColor) {
+        this.gradientColor = gradientColor;
+    }
+    
+    /**
+     * Sets the gradient type.
+     * @param gradientType value.
+     */
+    public void setGradientType(int gradientType){
+        this.gradientType = gradientType;
+    }
 
     /**
      * Sets the fill mode.
@@ -191,5 +241,5 @@ public class GAttribute {
      */
     public void setTransparency(float transparency) {
         this.transparency = transparency;
-    }
+    }         
 }

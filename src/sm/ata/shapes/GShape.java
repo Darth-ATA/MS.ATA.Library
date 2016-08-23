@@ -105,4 +105,10 @@ public interface GShape {
      */
     public void setAttributes(GAttribute attributes);
     
+    /**
+     * Creates the gradient of the shape.
+     * @param p1 start of the gradient.
+     * @param p2 end of the gradient.
+     */
+    public void setGradient(Point2D p1, Point2D p2);
 }

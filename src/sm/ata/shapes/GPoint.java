@@ -6,9 +6,9 @@
 package sm.ata.shapes;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
@@ -21,6 +21,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class GPoint extends Rectangle2D.Double implements GShape {
     private GAttribute attributes;
+    private GradientPaint gradient;
     
     /**
      * Default constructor of the point.
@@ -145,12 +146,18 @@ public class GPoint extends Rectangle2D.Double implements GShape {
         
         g2d.setRenderingHints(render);
         
-        if(this.attributes.getFillMode() == 0){
+        /*if(this.attributes.getFillMode() == FILL_OFF){
             g2d.draw(this);
         }
-        else if (this.attributes.getFillMode() == 1){
+        else if (this.attributes.getFillMode() == FILL_ON){
             g2d.fill(this);
         }
+        else {
+            this.setGradient(this.getInterestPoint(0), this.getInterestPoint(1));
+            g2d.setPaint(this.gradient);
+            g2d.fill(this);
+        }*/
+        g2d.draw(this);
     }
 
     /**
@@ -197,5 +204,14 @@ public class GPoint extends Rectangle2D.Double implements GShape {
     @Override
     public void setAttributes(GAttribute attributes){
         this.attributes = new GAttribute(attributes);
+    }
+    
+    /**
+     * Creates the gradient with the setted colors.
+     * @param p1 start point of the gradient.
+     * @param p2 end point of the gradient.
+     */
+    public void setGradient(Point2D p1, Point2D p2){
+        this.gradient = null;
     }
 }

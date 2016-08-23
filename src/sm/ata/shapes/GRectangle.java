@@ -6,13 +6,16 @@
 package sm.ata.shapes;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import static sm.ata.shapes.GAttribute.FILL_OFF;
+import static sm.ata.shapes.GAttribute.FILL_ON;
 
 /**
  * This class has all the attributes and methods needed for draw a rectangle.
@@ -20,8 +23,8 @@ import java.awt.geom.Rectangle2D;
  * @author Darth-ATA
  */
 public class GRectangle extends Rectangle2D.Double implements GShape {    
-      
     private GAttribute attributes;
+    private GradientPaint gradient;
     
     /**
      * Default constructor of the rectangle.
@@ -148,10 +151,15 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
         
         g2d.setRenderingHints(render);
         
-        if(this.attributes.getFillMode() == 0){
+        if(this.attributes.getFillMode() == FILL_OFF){
             g2d.draw(this);
         }
-        else if (this.attributes.getFillMode() == 1){
+        else if (this.attributes.getFillMode() == FILL_ON){
+            g2d.fill(this);
+        }
+        else {
+            this.setGradient(this.getInterestPoint(0), this.getInterestPoint(1));
+            g2d.setPaint(this.gradient);
             g2d.fill(this);
         }
     }
@@ -189,5 +197,28 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
     @Override
     public void setAttributes(GAttribute attributes){
         this.attributes = new GAttribute(attributes);
+    }
+    
+    /**
+     * Creates the gradient with the setted colors.
+     * @param p1 start point of the gradient.
+     * @param p2 end point of the gradient.
+     */
+    @Override
+    public void setGradient(Point2D p1, Point2D p2){
+        switch(this.attributes.getGradientType()){
+            case 0:
+                this.gradient = new GradientPaint(new Point((int) p1.getX(),0), this.attributes.getColor(), 
+                        new Point((int) p2.getX(),0), this.attributes.getGradientColor());
+                break;
+            case 1:
+                this.gradient = new GradientPaint(new Point(0,(int) p1.getY()), this.attributes.getColor(), 
+                        new Point(0,(int) p2.getY()), this.attributes.getGradientColor());
+                break;
+            default:
+                this.gradient = new GradientPaint(p1, this.attributes.getColor(), 
+                        p2, this.attributes.getGradientColor());
+                break;
+        }
     }
 }

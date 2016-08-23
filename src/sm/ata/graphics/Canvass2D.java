@@ -14,8 +14,12 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import sm.ata.shapes.GArc;
 import sm.ata.shapes.GAttribute;
+import static sm.ata.shapes.GAttribute.ANTIALIASING_OFF;
+import static sm.ata.shapes.GAttribute.ANTIALIASING_ON;
 import sm.ata.shapes.GEllipse;
 import sm.ata.shapes.GLine;
 import sm.ata.shapes.GPoint;
@@ -58,14 +62,9 @@ public class Canvass2D extends javax.swing.JPanel {
         initComponents();
         this.vShape = new ArrayList();
         this.attributes = new GAttribute();
-        //this.stroke = new BasicStroke(thick);
         this.drawMode = M_POINTS;
         this.editMode = false;
-        //this.color = Color.BLACK;
-        //this.fill = false;
         this.thick = 1;
-        //this.smooth = false;
-        //this.transparency = false;
     }
     
     // Getters
@@ -75,6 +74,14 @@ public class Canvass2D extends javax.swing.JPanel {
      */
     public Color getColor(){
         return this.attributes.getColor();
+    }
+    
+    /**
+     * This method provides teh current color of the gradient in the canvass.
+     * @return gradient color of the canvass.
+     */
+    public Color getGradientColor(){
+        return this.attributes.getGradientColor();
     }
     
     /**
@@ -183,12 +190,10 @@ public class Canvass2D extends javax.swing.JPanel {
      */
     public void changeAntialiashing() {
         if (this.attributes.getAntialiasing()){
-            this.attributes.setAntialiasing(false);
-            //this.currentShape.getAttributes().setAntialiasing(GAttribute.ANTIALIASING_OFF);
+            this.attributes.setAntialiasing(ANTIALIASING_OFF);
         }
         else{
-            this.attributes.setAntialiasing(true);
-            //this.currentShape.getAttributes().setAntialiasing(GAttribute.ANTIALIASING_ON);
+            this.attributes.setAntialiasing(ANTIALIASING_ON);
         }
         if(this.currentShape != null){
             this.currentShape.setAttributes(this.attributes);
@@ -214,6 +219,18 @@ public class Canvass2D extends javax.swing.JPanel {
      */
     public void setColor(Color color){
         this.attributes.setColor(color);
+        if(this.currentShape != null){
+            this.currentShape.setAttributes(this.attributes);
+            this.repaint();
+        }
+    }
+    
+    /**
+     * This method changes the color for the gradient.
+     * @param gradientColor: Color whose you want to take.
+     */
+    public void setGradientColor(Color gradientColor){
+        this.attributes.setGradientColor(gradientColor);
         if(this.currentShape != null){
             this.currentShape.setAttributes(this.attributes);
             this.repaint();
@@ -272,6 +289,18 @@ public class Canvass2D extends javax.swing.JPanel {
      */
     public void setFillMode(int fillMode){
         this.attributes.setFillMode(fillMode);
+        if(this.currentShape != null){
+            this.currentShape.setAttributes(this.attributes);
+            this.repaint();
+        }
+    }
+    
+    /**
+     * This method change the gradient type.
+     * @param gradientType to be set.
+     */
+    public void setGradientType(int gradientType){
+        this.attributes.setGradientType(gradientType);
         if(this.currentShape != null){
             this.currentShape.setAttributes(this.attributes);
             this.repaint();
