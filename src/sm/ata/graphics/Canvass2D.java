@@ -42,13 +42,7 @@ public class Canvass2D extends javax.swing.JPanel {
     
     private GAttribute attributes;
     
-    /*protected Color color;
-    protected boolean fill;*/
     private int thick;
-    
-    /*protected Stroke stroke;
-    protected boolean smooth;
-    protected boolean transparency;*/
     
     private Point2D pressPoint;
     private Point2D cornerPoint;
@@ -375,7 +369,7 @@ public class Canvass2D extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBackground(new java.awt.Color(204, 204, 204));
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 canvassMouseDragged(evt);
@@ -414,7 +408,7 @@ public class Canvass2D extends javax.swing.JPanel {
             currentShape = getSelectedShape(evt.getPoint());
             if (this.currentShape != null){
                 this.cornerPoint = this.currentShape.getInterestPoint(FIRST_CORNER);
-                this.currentShape.setAttributes(this.attributes);
+                //this.currentShape.setAttributes(this.attributes);
             }
         }
         else
