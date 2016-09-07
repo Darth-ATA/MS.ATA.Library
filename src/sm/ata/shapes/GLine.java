@@ -6,17 +6,13 @@
 package sm.ata.shapes;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Composite;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import static sm.ata.shapes.GAttribute.FILL_GRADIENT;
-import static sm.ata.shapes.GAttribute.FILL_OFF;
-import static sm.ata.shapes.GAttribute.FILL_ON;
 
 /**
  * This class has all the attributes and methods needed for draw a ellipse.
@@ -160,6 +156,7 @@ public class GLine extends Line2D.Double implements GShape {
         
         g2d.setRenderingHints(render);
         
+        // TODO: Borrar si no se usa
         /*
         if(this.attributes.getFillMode() == FILL_OFF){
             g2d.draw(this);

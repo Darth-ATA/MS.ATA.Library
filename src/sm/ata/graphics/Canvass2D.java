@@ -5,7 +5,6 @@
  */
 package sm.ata.graphics;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,8 +13,6 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import sm.ata.shapes.GArc;
 import sm.ata.shapes.GAttribute;
 import static sm.ata.shapes.GAttribute.ANTIALIASING_OFF;
@@ -23,12 +20,15 @@ import static sm.ata.shapes.GAttribute.ANTIALIASING_ON;
 import sm.ata.shapes.GEllipse;
 import sm.ata.shapes.GLine;
 import sm.ata.shapes.GPoint;
+import sm.ata.shapes.GQuadCurve;
 import sm.ata.shapes.GRectangle;
 import sm.ata.shapes.GShape;
 import static sm.ata.shapes.GShape.FIRST_CORNER;
 
 /**
- *
+ * This class pretends to be a canvass where the user can draw inside him
+ * shapes and save the created canvass.
+ * 
  * @author Darth-ATA
  */
 public class Canvass2D extends javax.swing.JPanel {
@@ -38,6 +38,7 @@ public class Canvass2D extends javax.swing.JPanel {
     public static final int M_RECTANGLES = 2;
     public static final int M_ELLIPSES = 3;
     public static final int M_ARC = 4;
+    public static final int M_QUAD_CURVE = 5;
     
     protected ArrayList <GShape> vShape; // Container of the shapes in the canvass
     
@@ -48,6 +49,7 @@ public class Canvass2D extends javax.swing.JPanel {
     
     private int thick;
     
+    private ArrayList<Point2D> pointsForControlFigure;
     private Point2D pressPoint;
     private Point2D cornerPoint;
     
@@ -61,6 +63,7 @@ public class Canvass2D extends javax.swing.JPanel {
     public Canvass2D() {
         initComponents();
         this.vShape = new ArrayList();
+        this.pointsForControlFigure = new ArrayList();
         this.attributes = new GAttribute();
         this.drawMode = M_POINTS;
         this.editMode = false;
@@ -148,7 +151,7 @@ public class Canvass2D extends javax.swing.JPanel {
         return this.figureMode;
     }
     
-    // TPODO: BORRAR SI NO LO USAMOS
+    // TODO: BORRAR SI NO LO USAMOS
     /**
      * This method provides the start point
      * @return start point of the canvass
@@ -249,6 +252,7 @@ public class Canvass2D extends javax.swing.JPanel {
         }
     }
     
+    // TODO: Borrar si al final no se usa
     /**
      * Change the start point of the canvass
      * @param startPoint change the start point used by the canvass
@@ -277,10 +281,7 @@ public class Canvass2D extends javax.swing.JPanel {
      * This method activates or desactivates the edit mode.
      */
     public void changeEditMode(){
-        if (this.editMode)
-            this.editMode = false;
-        else
-            this.editMode = true;
+        this.editMode = !this.editMode;
     }
     
     /**
@@ -353,6 +354,8 @@ public class Canvass2D extends javax.swing.JPanel {
     /**
      * This method creates the shape depend on the figure mode
      * (M_POINTS, M_LINES, M_RECTANGLES, M_ELLIPSE, M_ARC)
+     * 
+     * @param point start point of the shape.
      */
     public void createShape(Point2D point){
         switch (this.figureMode){
@@ -371,8 +374,17 @@ public class Canvass2D extends javax.swing.JPanel {
         this.vShape.add(this.currentShape);
     }
     
+    public void createControlShape(ArrayList<Point2D> points){
+        if (this.figureMode == M_QUAD_CURVE){
+            this.currentShape = new GQuadCurve(points.get(0),points.get(1),points.get(2));
+        }
+        this.vShape.add(this.currentShape);
+    }
+    
     /**
      * This method updates the figure dimensions
+     * 
+     * @param point end point of the shape.
      */
     public void updateShape(Point2D point){
         this.currentShape.updateShape(this.pressPoint, point);
@@ -381,6 +393,8 @@ public class Canvass2D extends javax.swing.JPanel {
     
     /**
      * This method move the figure to another position
+     * 
+     * @param point location to move the shape.
      */
     public void moveShape(Point2D point){
         if (this.currentShape != null){
@@ -433,6 +447,15 @@ public class Canvass2D extends javax.swing.JPanel {
     private void canvassMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvassMousePressed
         this.pressPoint = evt.getPoint();
         
+        if (this.figureMode == M_QUAD_CURVE && !this.editMode){
+            if(this.pointsForControlFigure.size() < 3){
+                this.pointsForControlFigure.add(evt.getPoint());
+            }
+        }
+        else{
+            this.pointsForControlFigure.clear();
+        }
+        
         if (this.editMode){
             currentShape = getSelectedShape(evt.getPoint());
             if (this.currentShape != null){
@@ -440,8 +463,17 @@ public class Canvass2D extends javax.swing.JPanel {
                 //this.currentShape.setAttributes(this.attributes);
             }
         }
-        else
-            this.createShape(evt.getPoint());
+        else{
+            if (this.figureMode == M_QUAD_CURVE){
+                if(this.pointsForControlFigure.size() >= 3){
+                    this.createControlShape(this.pointsForControlFigure);
+                    this.pointsForControlFigure.clear();
+                }
+            }
+            else{
+                this.createShape(evt.getPoint());
+            }
+        }
         
     }//GEN-LAST:event_canvassMousePressed
     
@@ -461,8 +493,10 @@ public class Canvass2D extends javax.swing.JPanel {
                 this.moveShape(point);
             }
         }
-        else
-            this.updateShape(dragPoint);
+        else{
+            if (this.figureMode != M_QUAD_CURVE)
+                this.updateShape(dragPoint);
+        }
     }//GEN-LAST:event_canvassMouseDragged
 
     /**

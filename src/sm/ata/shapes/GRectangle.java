@@ -82,7 +82,7 @@ public class GRectangle extends Rectangle2D.Double implements GShape {
     
     /**
      * Obtains the properties of the rectangle.
-     * @return an gAttribute with the properties of the rectangle.
+     * @return a GAttribute with the properties of the rectangle.
      */
     @Override
     public GAttribute getAttributes() {
