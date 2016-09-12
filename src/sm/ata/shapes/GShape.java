@@ -5,110 +5,135 @@
  */
 package sm.ata.shapes;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.Point2D;
-
+import static sm.ata.shapes.GAttribute.S_BROKEN;
+import static sm.ata.shapes.GAttribute.S_CONTINUOUS;
 
 /**
- * This interface stablish the minimum functionalaties that all our shapes
- * must have.
- * 
+ * This abstract class stablish the minimum functionalaties and attributes 
+ * that all our shapes must have and implements some shared methods.
  * @author Darth-ATA
  */
-public interface GShape {
-    
-    /**
-     * First corner of the shape
-     */
-    public final static int FIRST_CORNER = 0;
-    /**
-     * Second corner of the shape
-     */
-    public final static int SECOND_CORNER = 1;
-    
-    /**
-     * For not filled shapes.
-     */
-    public final static int NOT_FILLED = 0;
-    
-    /**
-     * For filled shapes.
-     */
-    public final static int FILLED = 1;
-    
-    /**
-     * Obtains all the properties of the shape.
-     * 
-     * @return an gAttribute with the attributes of the shape.
-     */
-    public GAttribute getAttributes();
+public abstract class GShape {
+    protected Shape shape;
+    protected GAttribute attributes;
+    protected GradientPaint gradient;
     
     /**
      * Obtains the start point of the shape.
      * 
-     * @return the point of the left superior corner of the shape.
+     * @return the left superior corner of the shape.
      */
-    public Point2D getStartPoint();
+    public abstract Point2D getStartPoint();
     
     /**
      * Obtains the end point of the shape.
-     * 
-     * @return the point of the right inferior corner of the shape.
+     * @return the right inferior corner of the shape.
      */
-    public Point2D getEndPoint();
+    public abstract Point2D getEndPoint();
+    
+    /**
+     * Obtains interesting points of the shape.
+     * @param index of the shape.
+     * @return the point desired.
+     */
+    public abstract Point2D getInterestPoint(int index);
     
     /**
      * Moves the shape to another point.
      * 
-     * @param pos
+     * @param pos the reference point for the traslation of the shape.
      */
-    public void moveShape(Point2D pos);
-    
-    /**
-     * Draw the shape in the desired Graphics2D.
-     * @param g2d Graphics2D where we want to draw the shape.
-     */
-    public void draw(Graphics2D g2d);
+    public abstract void moveShape(Point2D pos);
     
     /**
      * Updates the shape (redimensionations).
      * @param startPoint new start point of the shape.
      * @param endPoint new end point of the shape.
      */
-    public void updateShape(Point2D startPoint, Point2D endPoint);
+    public abstract void updateShape(Point2D startPoint, Point2D endPoint);
     
     /**
-     * Obtains the Rectangle that has the shape.
-     * @return Rectnagle object that has the shape.
+     * Obtains the properties of the shape.
+     * @return the properties of the shape.
      */
-    public Rectangle getBounds();
-    
-    /**
-     * Informs if the point is inside of the shape.
-     * @param point the point that wants to know if is in the shape.
-     * @return true or flase depending on the situation.
-     */
-    public boolean contains(Point2D point);
-    
-    /**
-     * Obtains some interesting points of the shape.
-     * @param index what point it wants to take
-     * @return the interest point.
-     */
-    public Point2D getInterestPoint(int index);
+    public GAttribute getAttributes(){
+        return this.attributes;
+    }
     
     /**
      * Stablish the attributes of the shape.
      * @param attributes wanted for the shape.
      */
-    public void setAttributes(GAttribute attributes);
+    public void setAttributes(GAttribute attributes){
+        this.attributes = new GAttribute(attributes);
+    }
     
     /**
-     * Creates the gradient of the shape.
-     * @param p1 start of the gradient.
-     * @param p2 end of the gradient.
+     * Stablish the border color of the shape.
+     * @param color wanted for the border of the shape.
      */
-    public void setGradient(Point2D p1, Point2D p2);
+    public void setBorderColor(Color color){
+        this.attributes.setBorderColor(color);
+    }
+    
+    /**
+     * Stablihs the border style of the shape.
+     * @param borderStyle wanted for the border of the shape
+     *      - S_CONTINUOUS: continuous line border.
+     *      - S_BROKEN: separate line border.
+     */
+    public void setBorderType(int borderStyle) {
+        switch(borderStyle){
+            case S_CONTINUOUS:  this.attributes.setBorderStyle(S_CONTINUOUS);
+                                break;
+            case S_BROKEN:      this.attributes.setBorderStyle(S_BROKEN);
+                                break;
+        }
+    }
+    
+    /**
+     * Check if the shape contains the provided point.
+     * @param point to check.
+     * @return true or false depending on the result.
+     */
+    public boolean contains(Point2D point) {
+        return this.shape.contains(point);
+    }
+    
+    /**
+     * Draw the shape in the desired Graphics2D.
+     * @param g2d where draw the shape.
+     */
+    public void draw(Graphics2D g2d) {
+        // Stablish the color
+        g2d.setColor(this.attributes.getBorderColor());
+        
+        // Stablish the border style
+        g2d.setStroke(this.attributes.getBorder());
+        
+        // Stablish the shape's transparency
+        Composite composite;
+        composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.attributes.getTransparency());
+        g2d.setComposite(composite);
+        
+        // Stablish the antialiasing mode
+        RenderingHints render;
+        if(this.attributes.getAntialiasing()){
+            render = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+        else{
+            render = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        }
+        
+        g2d.setRenderingHints(render);
+        g2d.draw(this.shape);
+    }  
 }

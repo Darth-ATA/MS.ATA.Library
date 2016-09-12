@@ -15,20 +15,24 @@ import java.awt.Stroke;
  */
 public class GAttribute {
     
-    public static boolean ANTIALIASING_OFF = false;
-    public static boolean ANTIALIASING_ON = true;
+    public static final boolean ANTIALIASING_OFF = false;
+    public static final boolean ANTIALIASING_ON = true;
     
-    public static int FILL_OFF = 0;
-    public static int FILL_ON = 1;
-    public static int FILL_GRADIENT = 2;
+    public static final int S_CONTINUOUS = 0;
+    public static final int S_BROKEN = 1;
     
-    public static int HORIZONTAL_GRADIENT = 0;
-    public static int VERTICAL_GRADIENT = 1;
-    public static int DIAGONAL_GRADIENT = 2;
+    public static final int FILL_OFF = 0;
+    public static final int FILL_ON = 1;
+    public static final int FILL_GRADIENT = 2;
+    
+    public static final int HORIZONTAL_GRADIENT = 0;
+    public static final int VERTICAL_GRADIENT = 1;
+    public static final int DIAGONAL_GRADIENT = 2;
     
     private boolean antialiasing;   
     private float thick;
-    private Stroke border;      
+    private Stroke border;    
+    private Color borderColor;
     private Color color; 
     private Color gradientColor;
     private int gradientType;
@@ -43,6 +47,7 @@ public class GAttribute {
         this.thick  = 1;
         this.border = new BasicStroke(0);
         this.color = Color.BLACK;
+        this.borderColor = Color.BLACK;
         this.gradientColor = Color.WHITE;
         this.gradientType = HORIZONTAL_GRADIENT;
         this.fillMode = 0;
@@ -54,35 +59,19 @@ public class GAttribute {
      * @param antialiasing.
      * @param border.
      * @param color.
+     * @param borderColor.
      * @param gradientColor.
      * @param gradientType.
      * @param fillMode.
      * @param transparency .
      */
-    public GAttribute(boolean antialiasing, float border, Color color, Color gradientColor, int gradientType, int fillMode, float transparency){
+    public GAttribute(boolean antialiasing, float border, Color color, 
+            Color borderColor, Color gradientColor, int gradientType, 
+            int fillMode, float transparency){
         this.antialiasing = antialiasing;
         this.border = new BasicStroke(border);
         this.color = color;
-        this.gradientColor = gradientColor;
-        this.gradientType = gradientType;
-        this.fillMode = fillMode;
-        this.transparency = transparency;
-    }
-    
-    /**
-     * Constructor of the attribute.
-     * @param antialiasing.
-     * @param border.
-     * @param color.
-     * @param gradientColor.
-     * @param gradientType.
-     * @param fillMode.
-     * @param transparency .
-     */
-    public GAttribute(boolean antialiasing, Stroke border, Color color, Color gradientColor, int gradientType, int fillMode, float transparency){
-        this.antialiasing = antialiasing;
-        this.border = border;
-        this.color = color;
+        this.borderColor = borderColor;
         this.gradientColor = gradientColor;
         this.gradientType = gradientType;
         this.fillMode = fillMode;
@@ -95,6 +84,7 @@ public class GAttribute {
      */
     public GAttribute(GAttribute attribute){
         this.color = attribute.color;
+        this.borderColor = attribute.borderColor;
         this.gradientColor = attribute.gradientColor;
         this.gradientType = attribute.gradientType;
         this.fillMode = attribute.fillMode;
@@ -144,6 +134,14 @@ public class GAttribute {
      */
     public Color getColor() {
         return this.color;
+    }
+    
+    /**
+     * Obtains the border color vector.
+     * @return border color vector.
+     */
+    public Color getBorderColor(){
+        return this.borderColor;
     }
     
     /**
@@ -212,6 +210,14 @@ public class GAttribute {
     }
     
     /**
+     * Sets the border color value
+     * @param color value
+     */
+    public void setBorderColor(Color color){
+        this.borderColor = color;
+    }
+    
+    /**
      * Sets the gradient color value
      * @param gradientColor value
      */
@@ -241,5 +247,18 @@ public class GAttribute {
      */
     public void setTransparency(float transparency) {
         this.transparency = transparency;
-    }         
+    }      
+    
+    /**
+     * Sets tje border style.
+     * @param borderStyle.
+     */
+    public void setBorderStyle(int borderStyle){
+        if (borderStyle == S_CONTINUOUS)
+            this.border = new BasicStroke(this.thick);
+        else if(borderStyle == S_BROKEN){
+            float dash[] = {1.0f, 0.0f, 10.0f};
+            this.border = new BasicStroke(this.thick, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND, 2.0f, dash, 0.0f);
+        }
+    }
 }
